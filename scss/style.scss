@@ -1,0 +1,38 @@
+$bloodred: #511;
+$darkgrey: #222;
+$head: #ddd;
+$lightgrey: #e7e7e7;
+
+
+body {background-color: $bloodred;
+}
+
+table {
+  min-width: 80%;
+  font-size: 200%;
+  background-color: white;
+  margin: 20px auto;
+  border-bottom: 12px solid #222;
+  }
+
+caption {
+  background-color: $darkgrey;
+  color: $head;
+  text-align: center;
+}
+
+th,td {
+  padding: 8px 16px;
+  border-bottom: 1px solid #666;
+  text-align: left;
+}
+
+thead, tr:nth-child(even) {
+  background-color: $lightgrey;
+}
+
+.sortText {
+  text-decoration: underline;
+  cursor: pointer;
+}
+

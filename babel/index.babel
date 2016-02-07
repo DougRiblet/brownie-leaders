@@ -1,0 +1,81 @@
+
+var CamperRow = React.createClass({
+  render: function() {
+    return (
+      <tr>
+        <td>{this.props.rank}</td>
+        <td><img height="80" width="80" src={this.props.camper.img} /> {this.props.camper.username}</td>
+        <td>{this.props.camper.recent}
+        </td>
+        <td>{this.props.camper.alltime}</td>
+      </tr>
+    );
+  }
+});
+
+var LeaderList = React.createClass({
+  render: function() {
+    var rows = [];
+    this.props.leaders.forEach(function(camper, rank) {
+      rows.push(<CamperRow rank={rank + 1} camper={camper} key={camper.username} />);
+    });
+    return (
+      <tbody>
+        { rows }
+      </tbody>
+    );
+  }
+});
+
+var HeaderBar = React.createClass({
+  render: function() {
+    return (
+      <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th><span className="sortText" onClick={this.props.sortByRecent}>Past 30 Days</span></th>
+            <th><span className="sortText" onClick={this.props.sortByAlltime}>All Time</span></th>
+          </tr>
+        </thead>
+    );
+  }
+});
+
+var LeaderTable = React.createClass({
+    getInitialState: function() {
+      return {leaders: []};
+    },
+    componentDidMount: function() {
+      $.getJSON(this.props.url, function(leaders) {
+        this.setState({leaders: leaders});
+      }.bind(this));
+    },
+    sortByRecent: function() {
+      this.state.leaders.sort(function(a, b) {
+        return b.recent - a.recent;
+      });
+      this.setState({leaders: this.state.leaders});
+    },
+    sortByAlltime: function() {
+      this.state.leaders.sort(function(a, b) {
+        return b.alltime - a.alltime;
+      });
+      this.setState({leaders: this.state.leaders});
+    },
+  render: function() {
+    return (
+      <table>
+        <caption>FCC Brownie Points Leaderboard</caption>
+        <HeaderBar sortByRecent={this.sortByRecent} 
+                    sortByAlltime={this.sortByAlltime} />
+        <LeaderList leaders={this.state.leaders} />
+      </table>
+    );
+  }
+});
+
+React.render(
+  <LeaderTable url="http://fcctop100.herokuapp.com/api/fccusers/top/recent" />,
+  document.getElementById('container')
+);
